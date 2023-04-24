@@ -1,28 +1,39 @@
 import psutil
-import glances
-#import PySimpleGUI as GUI
+import PySimpleGUI as GUI
 
+# Outside the while loop to use print statements
+cpu_usage = psutil.cpu_percent()  # cpu usage as a percentage
+# print(cpu_usage)
+total_cpu = psutil.cpu_count()  # cpu core of cores including logical cores
+# print(total_cpu)
+cpu_cores = psutil.cpu_count(logical=False)  # cpu cores only
+# print(cpu_cores)
+ram_info = psutil.virtual_memory()  # the amount of memory in the system
+# print(ram_info)
+ram_usage = psutil.virtual_memory().percent  # ram usage as a percentage
+# print(ram_usage)
 
-cpu_times = psutil.cpu_times()
-print(cpu_times)
+layout = [[GUI.Text('CPU Usage:'), GUI.Text('', size=(20, 1), key='-cpu_usage-')],
+          [GUI.Text('Memory Usage:'), GUI.Text('', size=(20, 1), key='-ram_usage-')]],\
+         [GUI.Button('Exit')]
 
-cpu_satus = psutil.cpu_stats()
-print(cpu_satus)
+window = GUI.Window('System Monitor', layout)
 
-cpu_freq = psutil.cpu_freq()
-print(cpu_freq)
+while True:
+    event, values = window.read(timeout=600)
 
-total_cpu = psutil.cpu_count()
-print(total_cpu)
+    if event == GUI.WINDOW_CLOSED or event == 'Exit':
+        break
+    # device information that changes
+    cpu_usage = psutil.cpu_percent()  # cpu usage as a percentage
+    ram_usage = psutil.virtual_memory().percent  # ram usage as a percentage
+    # device information that does not change
+    total_cpu = psutil.cpu_count()  # cpu core of cores including logical cores
+    cpu_cores = psutil.cpu_count(logical=False)  # cpu cores only
+    ram_info = psutil.virtual_memory()  # the amount of memory in the system
 
-cpu_cores = psutil.cpu_count(logical=False)
-print(cpu_cores)
+    # information is updated
+    window['-cpu_usage-'].update(f'{cpu_usage}%')
+    window['-ram_usage-'].update(f'{ram_usage}%')
 
-ram_info = psutil.virtual_memory()
-print(ram_info)
-
-disk_info = psutil.disk_io_counters()
-print(disk_info)
-
-
-#GUI.Window(title="Test window", layout=[[]], margins=(200, 60)).read()
+window.close()
