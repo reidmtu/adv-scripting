@@ -19,7 +19,8 @@ layout = [[GUI.Text('CPU Usage:'), GUI.Text('', size=(20, 1), key='-cpu_usage-')
           [GUI.Text('RAM Usage:'), GUI.Text('', size=(20, 1), key='-ram_usage-')]], \
          [GUI.Button('Exit')]
 
-window = GUI.Window('System Monitor', layout,size=(725, 250))  #size=(725, 200) makes the window big to allow the 'ram_info'
+window = GUI.Window('System Monitor', layout, size=(725, 250))
+#  size=(725, 200) makes the window big to allow the 'ram_info'
 
 while True:
     event, values = window.read(timeout=200)
